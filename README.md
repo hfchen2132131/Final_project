@@ -71,19 +71,29 @@ Or You can use [servo](http://serveo.net/) to expose local servers to the intern
 
 
 ## Finite State Machine
-![fsm](./img/show-fsm.png)
+![fsm](./fsm.png)
 
 ## Usage
 The initial state is set to `user`.
 
-Every time `user` state is triggered to `advance` to another state, it will `go_back` to `user` state after the bot replies corresponding message.
+####總共有4個功能：
+1 bin hex dec
+2 重量單位轉換
+3 長度單位轉換
+4 show fsm graph
+
 
 * user
-	* Input: "go to state1"
-		* Reply: "I'm entering state1"
+	* Input: "1"
+		* 進入: "bin hex dec"模式
 
-	* Input: "go to state2"
-		* Reply: "I'm entering state2"
+	* Input: "2"
+		* 進入: "重量單位轉換"模式
+	* Input: "3"
+		* 進入: "長度單位轉換"模式
+	* Input: "4"
+		* 回覆一個fsm graph
+		
 
 ## Deploy
 Setting to deploy webhooks on Heroku.
