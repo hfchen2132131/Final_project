@@ -8,14 +8,26 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
 from fsm import TocMachine
-from utils import send_text_message
+from utils import send_text_message, send_image_message
 
 load_dotenv()
 
 
 machine = TocMachine(
-    states=["user", "state1", "state2"],
+    states=["user", "help", "state1", "state2", "state3", "graph"],
     transitions=[
+        {
+            "trigger": "advance",
+            "source": "user",
+            "dest": "help",
+            "conditions": "is_going_to_help",
+        },
+        {
+            "trigger": "advance",
+            "source": "user",
+            "dest": "graph",
+            "conditions": "is_going_to_graph",
+        },
         {
             "trigger": "advance",
             "source": "user",
@@ -28,7 +40,41 @@ machine = TocMachine(
             "dest": "state2",
             "conditions": "is_going_to_state2",
         },
-        {"trigger": "go_back", "source": ["state1", "state2"], "dest": "user"},
+        
+        {
+            "trigger": "advance",
+            "source": "user",
+            "dest": "state3",
+            "conditions": "is_going_to_state3",
+        },
+        {
+            "trigger": "go_back", 
+            "source": "graph", 
+            "dest": "user"
+        },
+        {
+            "trigger": "go_back", 
+            "source": "state1", 
+            "dest": "user",
+            "conditions": "check_state1"
+        },
+        {
+            "trigger": "go_back", 
+            "source": "state2", 
+            "dest": "user",
+            "conditions": "check_state2"
+        },
+        {
+            "trigger": "go_back", 
+            "source": "state3", 
+            "dest": "user",
+            "conditions": "check_state3"
+        },
+        {
+            "trigger": "go_back", 
+            "source": "help", 
+            "dest": "user"
+        },
     ],
     initial="user",
     auto_transitions=False,
@@ -102,9 +148,14 @@ def webhook_handler():
             continue
         print(f"\nFSM STATE: {machine.state}")
         print(f"REQUEST BODY: \n{body}")
-        response = machine.advance(event)
+        
+        if machine.state == 'user':
+            response = machine.advance(event)
+        else:
+            response = machine.go_back(event)
+        print(response)
         if response == False:
-            send_text_message(event.reply_token, "Not Entering any State")
+            send_text_message(event.reply_token, "請再試一次")
 
     return "OK"
 
