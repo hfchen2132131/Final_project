@@ -23,7 +23,7 @@ def send_image_message(reply_token, text):
     line_bot_api = LineBotApi(channel_access_token)
     
     
-    line_bot_api.reply_message(reply_token, ImageSendMessage(original_content_url='https://d478cffd6441.ngrok.io/show-fsm',preview_image_url='https://d478cffd6441.ngrok.io/show-fsm'))
+    line_bot_api.reply_message(reply_token, ImageSendMessage(original_content_url='https://arcane-meadow-43606.herokuapp.com/show-fsm',preview_image_url='https://arcane-meadow-43606.herokuapp.com/show-fsm'))
     
     print("send!!")
     return "OK"
