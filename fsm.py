@@ -154,7 +154,7 @@ class TocMachine(GraphMachine):
         elif tp[0] == "兩":
             try:
                 n = int(tp[1])
-                n = 16 * 0.6 * n
+                n = 0.6 * n / 16
             except:
                 return False
         elif tp[0] == "台斤":
